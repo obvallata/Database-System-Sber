@@ -1,0 +1,78 @@
+version: '3'
+
+services:
+  redis-node-1:
+    image: redis:latest
+    ports:
+      - 7010
+    network_mode: "host"
+    hostname: redis-node-1
+    volumes:
+      - ./7010/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
+
+  redis-node-2:
+    image: redis:latest
+    ports:
+      - 7001
+    network_mode: "host"
+    hostname: redis-node-2
+    volumes:
+      - ./7001/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
+
+  redis-node-3:
+    image: redis:latest
+    ports:
+      - 7002
+    network_mode: "host"
+
+    hostname: redis-node-3
+    volumes:
+      - ./7002/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
+
+  redis-node-4:
+    image: redis:latest
+    ports:
+      - 7003
+    network_mode: "host"
+
+    hostname: redis-node-4
+    volumes:
+      - ./7003/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
+
+  redis-node-5:
+    image: redis:latest
+    ports:
+      - 7004
+    network_mode: "host"
+
+    hostname: redis-node-5
+    volumes:
+      - ./7004/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
+
+  redis-node-6:
+    image: redis:latest
+    ports:
+      - 7005
+    network_mode: "host"
+
+    hostname: redis-node-6
+    volumes:
+      - ./7005/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
+  
+  redis-cluster-creator:
+    image: redis:latest
+    network_mode: "host"
+    command: redis-cli -p 6379 --cluster create localhost:7010 localhost:7001 localhost:7002 localhost:7003 localhost:7004 localhost:7005 --cluster-replicas 1 --cluster-yes
+    depends_on:
+      - redis-node-1
+      - redis-node-2
+      - redis-node-3
+      - redis-node-4
+      - redis-node-5
+      - redis-node-6
